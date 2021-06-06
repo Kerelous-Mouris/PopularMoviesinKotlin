@@ -1,8 +1,11 @@
 package com.example.popularmoviesinkotlin
 
-import retrofit2.Retrofit
+import android.util.Log
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 object MoviesClient {
 
@@ -16,6 +19,30 @@ object MoviesClient {
             .build()
 
         services = retrofit.create(ApiServices::class.java)
+    }
+
+
+    fun fetchPopularMovies(page: Int = 1,
+                            onSuccess: (moviesList: MutableList<Movie>) -> Unit,
+                            onError: () -> Unit
+                           ){
+        services.getPopularMovies("2e572b097b879578d69b00ce5691dc0e",page).enqueue(object :
+            Callback<MoviesResponse> {
+            override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
+                if (response.isSuccessful){
+                    if (response.body() != null){
+                        onSuccess.invoke(response.body()!!.movies)
+                    }else{
+                        onError.invoke()
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+                    onError.invoke()
+            }
+        })
     }
 
 }

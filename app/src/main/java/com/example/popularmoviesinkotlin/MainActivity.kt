@@ -1,27 +1,30 @@
 package com.example.popularmoviesinkotlin
 
-import android.os.Build
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
+
+    var currentPageNumber: Int = 1
+    lateinit var moviesAdapter : MoviesAdapter
+    lateinit var llm : LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        moviesAdapter = MoviesAdapter(mutableListOf())
+        llm = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL,false)
 
-        Log.i("level: ", "reached main activity right before get function")
-
+        rv_movies.adapter = moviesAdapter
+        rv_movies.layoutManager = llm
 
         getPopularMovies()
 
@@ -30,22 +33,37 @@ class MainActivity : AppCompatActivity() {
 
     fun getPopularMovies(){
 
-        MoviesClient.services.getPopularMovies("2e572b097b879578d69b00ce5691dc0e").enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
-                if (response.isSuccessful){
-                    Log.i("response","there is a response and it is successful")
-                    rv_movies.adapter = MoviesAdapter(response.body()?.movies)
-                    rv_movies.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL,false)
-                }
-                else{
-                    Log.i("response","there is a response but not successful")
-                    Log.i("response",response.toString())
-                }
-            }
+        MoviesClient.fetchPopularMovies(
+            currentPageNumber,
+        ::onPopularMoviesFetched,
+        ::onError
+        )
+    }
 
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                Log.i("response","Failed!")
+    private fun onPopularMoviesFetched(moviesList: MutableList<Movie>) {
+        moviesAdapter.appendMovies(moviesList)
+        attachOnScrollListener()
+    }
+
+
+    fun attachOnScrollListener(){
+        rv_movies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val totalItems = llm.itemCount
+                val visibleItemCount = llm.childCount
+                val firstVisibleItem = llm.findLastVisibleItemPosition()
+
+                if (firstVisibleItem + visibleItemCount >= totalItems/2){
+                    rv_movies.removeOnScrollListener(this)
+                    currentPageNumber++
+                    Log.i("page number", currentPageNumber.toString())
+                    getPopularMovies()
+                }
             }
         })
+    }
+
+    private fun onError() {
+        Toast.makeText(this,"Failed to fetch movies", Toast.LENGTH_SHORT).show()
     }
 }

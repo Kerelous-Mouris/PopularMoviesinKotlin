@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import kotlinx.android.synthetic.main.card_movie.view.*
-class MoviesAdapter(private var moviesList: List<Movie>?) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
+class MoviesAdapter(private var moviesList: MutableList<Movie>?) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun onBind(movie: Movie){
             itemView.txt_release_date.text = movie.releaseDate
@@ -50,6 +50,16 @@ class MoviesAdapter(private var moviesList: List<Movie>?) : RecyclerView.Adapter
             Log.i("adapter", "list is null in the adapter")
             return 0
         }
+    }
+
+
+    fun appendMovies(movies: List<Movie>){
+        this.moviesList!!.addAll(movies)
+        notifyItemRangeChanged(
+            this.moviesList!!.size,
+            moviesList!!.size-1
+        )
+
     }
 
 }
