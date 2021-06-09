@@ -1,5 +1,6 @@
-package com.example.popularmoviesinkotlin
+package com.example.popularmoviesinkotlin.data
 
+import com.example.popularmoviesinkotlin.pojo.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MoviesResponse (

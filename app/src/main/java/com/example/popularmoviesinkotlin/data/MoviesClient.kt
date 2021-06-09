@@ -1,9 +1,6 @@
-package com.example.popularmoviesinkotlin
+package com.example.popularmoviesinkotlin.data
 
-import android.util.Log
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.popularmoviesinkotlin.pojo.Movie
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,8 +20,8 @@ object MoviesClient {
 
 
     fun fetchPopularMovies(page: Int = 1,
-                            onSuccess: (moviesList: MutableList<Movie>) -> Unit,
-                            onError: () -> Unit
+                           onSuccess: (moviesList: MutableList<Movie>) -> Unit,
+                           onError: () -> Unit
                            ){
         services.getPopularMovies("2e572b097b879578d69b00ce5691dc0e",page).enqueue(object :
             Callback<MoviesResponse> {

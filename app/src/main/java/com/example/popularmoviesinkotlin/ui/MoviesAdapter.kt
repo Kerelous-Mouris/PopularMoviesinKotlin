@@ -1,4 +1,4 @@
-package com.example.popularmoviesinkotlin
+package com.example.popularmoviesinkotlin.ui
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.popularmoviesinkotlin.R
+import com.example.popularmoviesinkotlin.pojo.Movie
 import kotlinx.android.synthetic.main.card_movie.view.*
 class MoviesAdapter(private var moviesList: MutableList<Movie>?) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     class MoviesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

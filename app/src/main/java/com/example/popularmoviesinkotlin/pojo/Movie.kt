@@ -1,4 +1,4 @@
-package com.example.popularmoviesinkotlin
+package com.example.popularmoviesinkotlin.pojo
 
 import com.google.gson.annotations.SerializedName
 

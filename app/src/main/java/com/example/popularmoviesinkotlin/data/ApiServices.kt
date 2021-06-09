@@ -1,4 +1,4 @@
-package com.example.popularmoviesinkotlin
+package com.example.popularmoviesinkotlin.data
 
 import retrofit2.Call
 import retrofit2.http.GET
