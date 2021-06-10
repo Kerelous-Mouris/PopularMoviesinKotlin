@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         rv_movies.layoutManager = llm
 
         movieViewModel = ViewModelProvider(this).get(MovieVM::class.java)
-        movieViewModel.initailize(currentPageNumber)
+        movieViewModel.initailize(currentPageNumber,applicationContext)
         movieViewModel.getPopularMovies()
 
         movieViewModel.moviesMutableLiveData.observe(this, object: Observer<List<Movie>>{

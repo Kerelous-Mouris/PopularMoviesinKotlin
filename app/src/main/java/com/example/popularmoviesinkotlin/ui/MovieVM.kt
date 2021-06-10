@@ -1,6 +1,8 @@
 package com.example.popularmoviesinkotlin.ui
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,9 +17,11 @@ class MovieVM() : ViewModel() {
 
     var moviesMutableLiveData : MutableLiveData<List<Movie>> = MutableLiveData()
     var currentPageNumber: Int = 1
-    fun initailize(page: Int){
-        currentPageNumber = page
+    lateinit var context: Context
 
+    fun initailize(page: Int, context: Context){
+        currentPageNumber = page
+        this.context = context
     }
     fun getPopularMovies()
     {
@@ -30,16 +34,11 @@ class MovieVM() : ViewModel() {
     }
 
     private fun onError() {
-        Log.i("Error","Failed to fetch movies")
+        Toast.makeText(context,"Failed to fetch movies!", Toast.LENGTH_SHORT).show()
     }
 
     private fun onPopularMoviesFetched(mutableList: MutableList<Movie>) {
-        Log.i("success","movies fetched successfully!")
-//        Log.i("Error",mutableList.toString())
-
         moviesMutableLiveData.value = mutableList
-
-
     }
 
     fun attachOnScrollListener(rv_movies: RecyclerView, llm: LinearLayoutManager){

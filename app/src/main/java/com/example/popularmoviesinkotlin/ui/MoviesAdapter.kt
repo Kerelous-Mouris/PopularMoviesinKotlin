@@ -49,7 +49,6 @@ class MoviesAdapter(private var moviesList: MutableList<Movie>?) : RecyclerView.
         if (moviesList!!.isNotEmpty()){
             return moviesList!!.size
         }else{
-            Log.i("adapter", "list is null in the adapter")
             return 0
         }
     }
